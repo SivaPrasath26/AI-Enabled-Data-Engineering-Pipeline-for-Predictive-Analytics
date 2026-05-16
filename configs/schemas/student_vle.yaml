@@ -1,0 +1,9 @@
+name: studentVle
+primary_key: [code_module, code_presentation, id_student, id_site, date]
+columns:
+  - {name: code_module,       type: string,  nullable: false}
+  - {name: code_presentation, type: string,  nullable: false}
+  - {name: id_student,        type: integer, nullable: false}
+  - {name: id_site,           type: integer, nullable: false}
+  - {name: date,              type: integer, nullable: false, min: -50, max: 300}
+  - {name: sum_click,         type: integer, nullable: false, min: 0}

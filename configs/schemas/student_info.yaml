@@ -1,0 +1,15 @@
+name: studentInfo
+primary_key: [id_student, code_module, code_presentation]
+columns:
+  - {name: code_module,         type: string,  nullable: false}
+  - {name: code_presentation,   type: string,  nullable: false}
+  - {name: id_student,          type: integer, nullable: false}
+  - {name: gender,              type: string,  nullable: false, allowed: [M, F]}
+  - {name: region,              type: string,  nullable: false}
+  - {name: highest_education,   type: string,  nullable: false}
+  - {name: imd_band,            type: string,  nullable: true}
+  - {name: age_band,            type: string,  nullable: false, allowed: ["0-35", "35-55", "55<="]}
+  - {name: num_of_prev_attempts,type: integer, nullable: false, min: 0, max: 10}
+  - {name: studied_credits,     type: integer, nullable: false, min: 0, max: 600}
+  - {name: disability,          type: string,  nullable: false, allowed: [Y, N]}
+  - {name: final_result,        type: string,  nullable: false, allowed: [Pass, Fail, Withdrawn, Distinction]}

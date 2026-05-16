@@ -1,0 +1,97 @@
+project:
+  name: edu-predictive-pipeline
+  version: 1.0.0
+  random_seed: 42
+
+paths:
+  raw: data/raw
+  bronze: data/bronze
+  silver: data/silver
+  gold: data/gold
+  artifacts: models/artifacts
+  logs: logs
+
+spark:
+  app_name: edu-pipeline
+  master: local[*]
+  driver_memory: 4g
+  executor_memory: 4g
+  shuffle_partitions: 64
+
+ingestion:
+  source: oulad_csv
+  files:
+    - studentInfo.csv
+    - studentRegistration.csv
+    - studentAssessment.csv
+    - assessments.csv
+    - courses.csv
+    - vle.csv
+    - studentVle.csv
+
+preprocessing:
+  null_strategy: drop_critical
+  dedup_keys:
+    studentInfo: [id_student, code_module, code_presentation]
+    studentVle: [id_student, code_module, code_presentation, id_site, date]
+  drop_outliers:
+    studentVle:
+      sum_click:
+        method: iqr
+        multiplier: 3.0
+
+features:
+  window_size_weeks: [1, 2, 4]
+  target_horizon_weeks: 4
+  target_column: final_result_binary
+  positive_label: at_risk
+  feature_groups:
+    - demographic
+    - registration
+    - assessment_history
+    - vle_activity
+    - temporal_dynamics
+
+training:
+  test_size: 0.2
+  cv_folds: 5
+  class_balance: stratified
+  early_stopping_rounds: 50
+
+models:
+  xgboost:
+    objective: binary:logistic
+    learning_rate: 0.05
+    max_depth: 7
+    n_estimators: 800
+    subsample: 0.85
+    colsample_bytree: 0.85
+    reg_alpha: 0.1
+    reg_lambda: 1.0
+  lightgbm:
+    objective: binary
+    learning_rate: 0.05
+    num_leaves: 63
+    n_estimators: 800
+    feature_fraction: 0.85
+    bagging_fraction: 0.85
+  lstm:
+    sequence_length: 30
+    hidden_units: 64
+    dropout: 0.3
+    batch_size: 128
+    epochs: 25
+    learning_rate: 0.001
+
+evaluation:
+  metrics: [accuracy, precision, recall, f1, roc_auc, pr_auc, brier]
+  fairness_slices: [gender, age_band, disability, region]
+  drift:
+    method: psi
+    threshold: 0.2
+
+serving:
+  host: 0.0.0.0
+  port: 8000
+  batch_limit: 1000
+  model_path: models/artifacts/latest

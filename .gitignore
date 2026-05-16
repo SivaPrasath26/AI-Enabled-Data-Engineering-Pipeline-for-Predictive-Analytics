@@ -1,0 +1,44 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+.env
+.idea/
+.vscode/
+.DS_Store
+
+# data
+data/raw/*
+data/bronze/*
+data/silver/*
+data/gold/*
+!data/raw/.gitkeep
+!data/bronze/.gitkeep
+!data/silver/.gitkeep
+!data/gold/.gitkeep
+
+# model artifacts
+models/artifacts/
+
+# logs
+logs/
+*.log
+
+# notebooks
+.ipynb_checkpoints/
+
+# spark
+spark-warehouse/
+metastore_db/
+derby.log
+
+# pytest
+.pytest_cache/
+.coverage
+htmlcov/
+
+# mypy
+.mypy_cache/
+
+# ruff
+.ruff_cache/

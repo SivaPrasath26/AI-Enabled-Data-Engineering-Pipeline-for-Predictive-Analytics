@@ -1,0 +1,9 @@
+name: assessments
+primary_key: [id_assessment]
+columns:
+  - {name: code_module,       type: string,  nullable: false}
+  - {name: code_presentation, type: string,  nullable: false}
+  - {name: id_assessment,     type: integer, nullable: false}
+  - {name: assessment_type,   type: string,  nullable: false, allowed: [TMA, CMA, Exam]}
+  - {name: date,              type: integer, nullable: true}
+  - {name: weight,            type: double,  nullable: false, min: 0, max: 100}
